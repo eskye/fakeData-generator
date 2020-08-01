@@ -10,6 +10,7 @@ namespace FakeDataGenerator
     {
         static async Task Main(string[] args)
         {
+            Randomizer.Seed = new Random(54815148);
             var billingDetailsFaker = new Faker<BillingDetails>()
                 .RuleFor(x => x.CustomerName, x=>x.Person.FullName)
                 .RuleFor(x => x.Email, x => x.Person.Email)
@@ -24,6 +25,7 @@ namespace FakeDataGenerator
                     .RuleFor(r => r.Currency, r => r.Finance.Currency().Code)
                     .RuleFor(r => r.Price, r => r.Finance.Amount(30, 1000))
                     .RuleFor(r => r.BillingDetails, r => billingDetailsFaker);
+
             foreach (var order in orderFaker.GenerateForever())
             {
                 var text = JsonSerializer.Serialize(order);
