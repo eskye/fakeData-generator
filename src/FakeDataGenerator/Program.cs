@@ -18,7 +18,15 @@ namespace FakeDataGenerator
                 .RuleFor(x => x.Phone, x => x.Person.Phone)
                 .RuleFor(x => x.PostCode, x => x.Address.ZipCode());
 
-            var text = JsonSerializer.Serialize(billingDetailsFaker.Generate());
+            var order = new Faker<Order>()
+                    .RuleFor(r => r.Id, Guid.NewGuid)
+                    .RuleFor(r => r.Currency, r => r.Finance.Currency().Code)
+                    .RuleFor(r => r.Price, r => r.Finance.Amount(30, 1000))
+                    .RuleFor(r => r.BillingDetails, r => billingDetailsFaker)
+                
+                ;
+
+            var text = JsonSerializer.Serialize(order.Generate());
 
             Console.WriteLine(text);
         }
